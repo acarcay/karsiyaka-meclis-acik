@@ -85,7 +85,11 @@ MIT
 
 - `npm test` ayrıştırma, tarih, Türkçe oy sayısı ve arşiv koruma kontrollerini çalıştırır.
 - Güncelleme diğer yılları korur; eksik ayrıştırma veya tekrarlanan karar varsa yayındaki veri değiştirilmez.
-- Tüm kayıtlar otomatik aktarım olarak sunulur; insan tarafından doğrulandığı iddia edilmez. Otomatik başlıklar özet değildir ve aktarım hataları olabilir. Mevcut kayıtların tamamında `reviewed: false` kullanılır.
+- Tüm kayıtlar otomatik aktarım olarak sunulur; insan tarafından doğrulandığı iddia edilmez. Başlıklar okunabilirlik için sadeleştirilir; aktarım ve sadeleştirme hataları olabilir. Mevcut kayıtların tamamında `reviewed: false` kullanılır.
 - `dist/data/status.json` içindeki `checkedAt` yalnızca başarılı çevrimiçi kaynak kontrolünden sonra güncellenir. En yeni karar tarihi bundan ayrıdır.
 - İletişim ve düzeltme talepleri GitHub Issues üzerinden alınır. Herkese açık bildirimlere hassas bilgi eklenmemelidir.
 - Yayına alınacak klasör `dist/` klasörüdür. Yerel değişiklikler Netlify'a yeniden dağıtılana kadar canlı siteye yansımaz.
+
+### Okunabilir başlıklar
+
+`data/decision-titles.json`, mevcut kararların kısa konu başlıklarını saklar. Bu başlıklar insan doğrulaması anlamına gelmez ve `reviewed` alanından bağımsızdır. Güncelleyici, kararın kaynak metni ve sonucu aynı kaldığında başlığı korur; içerik değişirse eski başlığı kullanmaz. Yeni veya değişen kayıtlar otomatik başlık üretimine döner.

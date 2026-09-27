@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile, rename } from 'node:fs/promises';
 import { basename, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { applyDisplayTitle } from './decision-titles.mjs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const archiveUrl = 'https://www.karsiyaka.bel.tr/meclis-karar-ozetleri';
@@ -212,7 +213,7 @@ export function mergeDecisions(existing, imported) {
     // PDF adresi değişse bile elle kontrol edilmiş özetleri koru.
     merged.set(record.id, previous?.reviewed ? { ...record, ...previous, source: record.source } : record);
   }
-  return [...merged.values()].sort((a, b) => b.date.localeCompare(a.date) || Number(b.decisionNo) - Number(a.decisionNo));
+  return [...merged.values()].map(applyDisplayTitle).sort((a, b) => b.date.localeCompare(a.date) || Number(b.decisionNo) - Number(a.decisionNo));
 }
 
 export { parseDecisions, makeTitle, normalizeDepartment, parseVotes, dateFromFilename };
