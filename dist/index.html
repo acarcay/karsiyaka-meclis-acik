@@ -5,47 +5,825 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Karşıyaka Ne Karar Verdi?</title>
   <meta name="description" content="Karşıyaka Belediye Meclisi kararlarını sade Türkçeyle arayın ve resmî belgelerine ulaşın.">
+  <!-- OG Meta — sosyal medya paylaşım kartı -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Karşıyaka Ne Karar Verdi?">
+  <meta property="og:description" content="Belediye meclisi kararlarının sade özeti. Her kayıt doğrudan resmî belgesine bağlıdır.">
+  <meta property="og:url" content="https://karsiyaka-meclis.netlify.app">
+  <meta property="og:image" content="https://karsiyaka-meclis.netlify.app/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Karşıyaka Ne Karar Verdi?">
+  <meta name="twitter:description" content="Belediye meclisi kararlarının sade özeti.">
+  <meta name="twitter:image" content="https://karsiyaka-meclis.netlify.app/og-image.jpg">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b6047'/%3E%3Cpath d='M17 17v30M18 32l25-15M18 32l25 15' fill='none' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root{--ink:#14231e;--muted:#607069;--paper:#f5f7f4;--card:#fff;--line:#dbe2de;--green:#0b6047;--green2:#e3f1eb;--amber:#9a5b08;--amber2:#fff1d6;--shadow:0 14px 36px rgba(20,35,30,.09)}
-    *{box-sizing:border-box} body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-    button,input{font:inherit} a{color:inherit}.shell{max-width:1120px;margin:auto;padding:0 24px 56px}
-    header{display:flex;align-items:center;justify-content:space-between;padding:24px 0 18px;border-bottom:1px solid var(--line)}
-    .brand{display:flex;gap:12px;align-items:center;font-weight:800;letter-spacing:-.02em}.mark{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--green);color:white;font-size:21px}
-    .about{color:var(--muted);font-size:14px;text-decoration:none}.intro{padding:44px 0 28px;display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end}
-    h1{font-size:clamp(2.1rem,5vw,4.4rem);line-height:.98;letter-spacing:-.055em;margin:0;max-width:780px}.intro p{max-width:370px;color:var(--muted);margin:0 0 5px}
-    .toolbar{position:sticky;top:0;z-index:2;padding:14px 0;background:rgba(245,247,244,.94);backdrop-filter:blur(12px);display:grid;grid-template-columns:1fr auto;gap:12px}
-    .search{position:relative}.search span{position:absolute;left:17px;top:13px;color:var(--muted)}input{width:100%;height:52px;border:1px solid var(--line);border-radius:14px;background:#fff;padding:0 18px 0 48px;color:var(--ink);outline:none;box-shadow:0 2px 8px rgba(20,35,30,.03)}input:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(11,96,71,.1)}
-    .filters{display:flex;gap:8px}.filter{height:52px;border:1px solid var(--line);border-radius:14px;background:white;padding:0 18px;cursor:pointer}.filter.active{background:var(--green);color:#fff;border-color:var(--green)}
-    .meta{display:flex;justify-content:space-between;align-items:center;margin:18px 0;color:var(--muted);font-size:14px}.status{display:flex;align-items:center;gap:8px}.dot{width:8px;height:8px;border-radius:50%;background:#1e9b67}
-    .list{display:grid;gap:14px}.decision{display:grid;grid-template-columns:145px 1fr 48px;gap:22px;align-items:start;padding:22px;border:1px solid var(--line);border-radius:18px;background:var(--card);box-shadow:0 2px 10px rgba(20,35,30,.035);transition:.2s ease;cursor:pointer}.decision:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:#c5d2cb}.date{font-weight:750}.date small{display:block;color:var(--muted);font-weight:500;margin-top:4px}.tag{display:inline-block;border-radius:999px;background:var(--green2);color:var(--green);font-weight:750;font-size:12px;padding:4px 9px;margin-bottom:8px}.tag.amber{background:var(--amber2);color:var(--amber)}h2{font-size:1.27rem;line-height:1.25;letter-spacing:-.02em;margin:0 0 8px}.decision p{margin:0;color:var(--muted);max-width:720px}.arrow{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:20px}.empty{padding:56px 20px;text-align:center;background:white;border:1px dashed var(--line);border-radius:18px;color:var(--muted)}
-    dialog{width:min(680px,calc(100% - 28px));border:0;border-radius:22px;padding:0;box-shadow:0 30px 90px rgba(0,0,0,.28);color:var(--ink)}dialog::backdrop{background:rgba(6,20,15,.58);backdrop-filter:blur(3px)}.panel{padding:28px}.panel-top{display:flex;justify-content:space-between;gap:20px}.close{border:0;background:#eef2ef;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:20px}.panel h3{font-size:1.75rem;line-height:1.15;letter-spacing:-.035em;margin:10px 0 18px}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:22px 0}.fact{background:var(--paper);border-radius:12px;padding:12px}.fact small{display:block;color:var(--muted)}.source{display:flex;justify-content:center;align-items:center;min-height:48px;background:var(--green);color:#fff;text-decoration:none;border-radius:13px;font-weight:750;margin-top:22px}.notice{margin-top:32px;padding:16px 18px;border-left:4px solid var(--green);background:var(--green2);color:#264d3f;font-size:14px}
-    footer{margin-top:42px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:20px}
-    @media(max-width:760px){.shell{padding:0 16px 40px}.about{display:none}.intro{grid-template-columns:1fr;padding:32px 0 22px}.intro p{font-size:15px}.toolbar{grid-template-columns:1fr}.filters{overflow:auto}.filter{height:44px;white-space:nowrap}.decision{grid-template-columns:1fr 42px;gap:12px;padding:18px}.date{grid-column:1/-1;font-size:14px}.date small{display:inline;margin-left:7px}.facts{grid-template-columns:1fr}.meta{align-items:flex-start;gap:14px}footer{display:block}}
+    /* ── Tasarım Tokenleri ───────────────────────────────────────── */
+    :root {
+      --ink: #14231e;
+      --ink2: #1e3329;
+      --muted: #607069;
+      --paper: #f5f7f4;
+      --card: #ffffff;
+      --line: #dbe2de;
+      --green: #0b6047;
+      --green-hover: #094e3a;
+      --green2: #e3f1eb;
+      --green3: #c5e4d6;
+      --amber: #9a5b08;
+      --amber2: #fff1d6;
+      --blue: #1a5fb4;
+      --blue2: #dce8f8;
+      --purple: #7b3fa0;
+      --purple2: #f0e4f7;
+      --shadow-sm: 0 2px 10px rgba(20,35,30,.035);
+      --shadow-md: 0 8px 28px rgba(20,35,30,.07);
+      --shadow-lg: 0 14px 36px rgba(20,35,30,.09);
+      --shadow-xl: 0 30px 90px rgba(0,0,0,.28);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --radius-xs: 8px;
+    }
+
+    /* ── Reset & Temel ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 16px/1.55 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    a { color: inherit; }
+
+    .shell { max-width: 1120px; margin: auto; padding: 0 24px 56px; }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0 16px; border-bottom: 1px solid var(--line);
+    }
+    .brand {
+      display: flex; gap: 12px; align-items: center;
+      font-weight: 800; letter-spacing: -.02em; font-size: 15px;
+    }
+    .mark {
+      display: grid; place-items: center;
+      width: 42px; height: 42px; border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--green), #17a07a);
+      color: white; font-size: 21px; font-weight: 900;
+      box-shadow: 0 4px 14px rgba(11, 96, 71, .25);
+    }
+    .about {
+      color: var(--muted); font-size: 14px; text-decoration: none;
+      padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line);
+      transition: .15s ease;
+    }
+    .about:hover { background: white; border-color: #c5d2cb; }
+
+    /* ── Intro ──────────────────────────────────────────────────── */
+    .intro {
+      padding: 48px 0 16px; display: grid;
+      grid-template-columns: 1fr auto; gap: 30px; align-items: end;
+    }
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 4.2rem);
+      line-height: .96; letter-spacing: -.055em;
+      margin: 0; max-width: 780px; font-weight: 900;
+    }
+    h1 span { color: var(--green); }
+    .intro p { max-width: 370px; color: var(--muted); margin: 0 0 5px; font-size: 15px; }
+
+    /* ── Dashboard ──────────────────────────────────────────────── */
+    .dashboard {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+      margin: 28px 0 32px;
+    }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 22px 20px;
+      box-shadow: var(--shadow-sm); transition: .2s ease;
+      position: relative; overflow: hidden;
+    }
+    .stat-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .stat-card:nth-child(1)::before { background: linear-gradient(90deg, var(--green), #17a07a); }
+    .stat-card:nth-child(2)::before { background: linear-gradient(90deg, #c97c0a, #e8a028); }
+    .stat-card:nth-child(3)::before { background: linear-gradient(90deg, var(--blue), #3a7fd5); }
+    .stat-card:nth-child(4)::before { background: linear-gradient(90deg, var(--purple), #9b5bc0); }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .stat-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: grid; place-items: center; font-size: 18px; margin-bottom: 14px;
+    }
+    .stat-card:nth-child(1) .stat-icon { background: var(--green2); }
+    .stat-card:nth-child(2) .stat-icon { background: var(--amber2); }
+    .stat-card:nth-child(3) .stat-icon { background: var(--blue2); }
+    .stat-card:nth-child(4) .stat-icon { background: var(--purple2); }
+    .stat-number {
+      font-size: 2.2rem; font-weight: 900; letter-spacing: -.04em;
+      line-height: 1; margin-bottom: 4px;
+    }
+    .stat-card:nth-child(1) .stat-number { color: var(--green); }
+    .stat-card:nth-child(2) .stat-number { color: var(--amber); }
+    .stat-card:nth-child(3) .stat-number { color: var(--blue); }
+    .stat-card:nth-child(4) .stat-number { color: var(--purple); }
+    .stat-label { color: var(--muted); font-size: 13px; font-weight: 500; }
+
+    /* ── Aylık Trend Grafiği ────────────────────────────────────── */
+    .trend {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow-sm); margin-bottom: 28px;
+    }
+    .trend-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 18px;
+    }
+    .trend-title { font-weight: 700; font-size: 15px; }
+    .trend-subtitle { color: var(--muted); font-size: 13px; }
+    .chart {
+      display: flex; align-items: flex-end; gap: 8px; height: 120px;
+      padding-top: 8px;
+    }
+    .bar-group {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .bar-wrapper {
+      width: 100%; height: 100px; display: flex; align-items: flex-end;
+      justify-content: center;
+    }
+    .bar {
+      width: 100%; max-width: 48px; border-radius: 6px 6px 2px 2px;
+      background: linear-gradient(to top, var(--green), #17a07a);
+      transition: height .6s cubic-bezier(.16, 1, .3, 1);
+      min-height: 4px; position: relative; cursor: default;
+    }
+    .bar:hover { filter: brightness(1.1); }
+    .bar-label {
+      font-size: 11px; color: var(--muted); font-weight: 600;
+      text-transform: uppercase; letter-spacing: .03em;
+    }
+    .bar-value {
+      position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+      font-size: 12px; font-weight: 700; color: var(--ink);
+      opacity: 0; transition: .2s ease;
+    }
+    .bar:hover .bar-value { opacity: 1; }
+
+    /* ── Toolbar (Arama + Filtreler + Yıl) ──────────────────────── */
+    .toolbar {
+      position: sticky; top: 0; z-index: 2; padding: 14px 0;
+      background: rgba(245, 247, 244, .92);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      display: grid; grid-template-columns: 1fr auto auto; gap: 10px;
+      align-items: center;
+    }
+    .search { position: relative; }
+    .search-icon {
+      position: absolute; left: 17px; top: 50%; transform: translateY(-50%);
+      color: var(--muted); pointer-events: none; font-size: 16px;
+    }
+    input[type="search"] {
+      width: 100%; height: 48px; border: 1px solid var(--line);
+      border-radius: 14px; background: #fff; padding: 0 18px 0 46px;
+      color: var(--ink); outline: none;
+      box-shadow: 0 2px 8px rgba(20,35,30,.03);
+      transition: .15s ease;
+    }
+    input[type="search"]:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(11, 96, 71, .1);
+    }
+    .filters {
+      display: flex; gap: 6px;
+    }
+    .filter {
+      height: 48px; border: 1px solid var(--line); border-radius: 14px;
+      background: white; padding: 0 16px; cursor: pointer;
+      font-weight: 500; font-size: 14px; color: var(--ink);
+      transition: .15s ease; white-space: nowrap;
+    }
+    .filter:hover { border-color: #c5d2cb; background: #fafcfb; }
+    .filter.active {
+      background: var(--green); color: #fff; border-color: var(--green);
+      font-weight: 600;
+    }
+    /* Yıl filtresi */
+    .year-select {
+      height: 48px; border: 1px solid var(--line); border-radius: 14px;
+      background: white; padding: 0 14px; cursor: pointer;
+      font-weight: 600; font-size: 14px; color: var(--ink);
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23607069' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      transition: .15s ease;
+    }
+    .year-select:hover { border-color: #c5d2cb; }
+    .year-select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 4px rgba(11,96,71,.1); }
+
+    /* ── Meta bilgi ─────────────────────────────────────────────── */
+    .meta {
+      display: flex; justify-content: space-between; align-items: center;
+      margin: 16px 0; color: var(--muted); font-size: 14px;
+    }
+    .status { display: flex; align-items: center; gap: 8px; }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #1e9b67; animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+
+    /* ── Karar Kartları ─────────────────────────────────────────── */
+    .list { display: grid; gap: 12px; }
+    .decision {
+      display: grid; grid-template-columns: 140px 1fr 44px;
+      gap: 20px; align-items: start; padding: 22px;
+      border: 1px solid var(--line); border-radius: var(--radius);
+      background: var(--card); box-shadow: var(--shadow-sm);
+      transition: all .2s ease; cursor: pointer;
+    }
+    .decision:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg); border-color: #c5d2cb;
+    }
+    .date { font-weight: 750; font-size: 15px; }
+    .date small {
+      display: block; color: var(--muted); font-weight: 500;
+      margin-top: 4px; font-size: 13px;
+    }
+    .tag {
+      display: inline-block; border-radius: 999px;
+      font-weight: 700; font-size: 11px; padding: 3px 10px;
+      margin-bottom: 8px; letter-spacing: .02em; text-transform: uppercase;
+    }
+    .tag-imar    { background: var(--amber2); color: var(--amber); }
+    .tag-mali    { background: var(--blue2);  color: var(--blue); }
+    .tag-kultur  { background: var(--purple2); color: var(--purple); }
+    .tag-yonetim { background: var(--green2); color: var(--green); }
+    h2 {
+      font-size: 1.15rem; line-height: 1.28;
+      letter-spacing: -.02em; margin: 0 0 6px; font-weight: 700;
+    }
+    .decision p {
+      margin: 0; color: var(--muted); max-width: 720px;
+      font-size: 14px; line-height: 1.5;
+    }
+    .arrow {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--line); display: grid; place-items: center;
+      font-size: 18px; transition: .2s ease; color: var(--muted);
+    }
+    .decision:hover .arrow {
+      background: var(--green); color: white; border-color: var(--green);
+    }
+    .empty {
+      padding: 56px 20px; text-align: center;
+      background: white; border: 1px dashed var(--line);
+      border-radius: var(--radius); color: var(--muted);
+    }
+
+    /* ── Sayfalama ──────────────────────────────────────────────── */
+    .pagination {
+      display: flex; justify-content: center; align-items: center;
+      gap: 8px; margin-top: 28px;
+    }
+    .page-btn {
+      height: 42px; min-width: 42px; border: 1px solid var(--line);
+      border-radius: 12px; background: white; padding: 0 14px;
+      cursor: pointer; font-weight: 600; font-size: 14px;
+      color: var(--ink); transition: .15s ease;
+    }
+    .page-btn:hover { border-color: #c5d2cb; background: #fafcfb; }
+    .page-btn.active { background: var(--green); color: white; border-color: var(--green); }
+    .page-btn:disabled { opacity: .4; cursor: default; }
+    .page-info { color: var(--muted); font-size: 13px; margin: 0 8px; }
+
+    /* ── Modal ──────────────────────────────────────────────────── */
+    dialog {
+      width: min(700px, calc(100% - 28px)); border: 0;
+      border-radius: 22px; padding: 0;
+      box-shadow: var(--shadow-xl); color: var(--ink);
+    }
+    dialog::backdrop {
+      background: rgba(6, 20, 15, .55);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    .panel {
+      padding: 28px 28px 24px; max-height: 90vh; overflow-y: auto;
+    }
+    .panel-top {
+      display: flex; justify-content: space-between; gap: 20px;
+      align-items: flex-start;
+    }
+    .panel-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .close {
+      border: 0; background: #eef2ef; width: 40px; height: 40px;
+      border-radius: 50%; cursor: pointer; font-size: 20px;
+      transition: .15s ease;
+    }
+    .close:hover { background: #dce2dd; }
+    .panel h3 {
+      font-size: 1.65rem; line-height: 1.18; letter-spacing: -.035em;
+      margin: 12px 0 12px; font-weight: 800;
+    }
+    .votes {
+      display: flex; gap: 8px; align-items: center;
+      margin: 0 0 16px; flex-wrap: wrap;
+    }
+    .votes-pill {
+      padding: 4px 12px; border-radius: 999px;
+      font-weight: 700; font-size: 13px;
+    }
+    .votes-pill.unanimous { background: var(--green2); color: var(--green); }
+    .votes-pill.majority  { background: var(--amber2); color: var(--amber); }
+    .votes-note { color: var(--muted); font-size: 13px; }
+    .panel-text {
+      color: var(--ink2); line-height: 1.65; margin: 0 0 4px; font-size: 15px;
+    }
+    .facts {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 8px; margin: 22px 0;
+    }
+    .fact { background: var(--paper); border-radius: var(--radius-sm); padding: 14px; }
+    .fact small { display: block; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .fact strong { font-size: 14px; }
+    .share-btn {
+      border: 1px solid var(--line); background: #fff; height: 40px;
+      padding: 0 14px; border-radius: 10px; cursor: pointer;
+      font-size: 13px; display: flex; align-items: center;
+      gap: 6px; white-space: nowrap; transition: .15s ease;
+    }
+    .share-btn:hover { background: var(--paper); }
+    .source {
+      display: flex; justify-content: center; align-items: center;
+      min-height: 48px; background: linear-gradient(135deg, var(--green), #17a07a);
+      color: #fff; text-decoration: none; border-radius: 13px;
+      font-weight: 750; margin-top: 18px; transition: .15s ease;
+      box-shadow: 0 4px 14px rgba(11, 96, 71, .2);
+    }
+    .source:hover { filter: brightness(1.08); }
+
+    /* ── Notice ─────────────────────────────────────────────────── */
+    .notice {
+      margin-top: 36px; padding: 18px 20px;
+      border-left: 4px solid var(--green);
+      background: var(--green2); color: #264d3f;
+      font-size: 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      line-height: 1.6;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    footer {
+      margin-top: 42px; padding-top: 22px;
+      border-top: 1px solid var(--line); color: var(--muted);
+      font-size: 13px; display: flex; justify-content: space-between; gap: 20px;
+    }
+
+    /* ── Animasyonlar ───────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .decision { animation: fadeUp .35s ease both; }
+    .decision:nth-child(n+2)  { animation-delay: .04s; }
+    .decision:nth-child(n+3)  { animation-delay: .08s; }
+    .decision:nth-child(n+4)  { animation-delay: .12s; }
+    .decision:nth-child(n+5)  { animation-delay: .16s; }
+
+    /* ── Mobil ──────────────────────────────────────────────────── */
+    @media (max-width: 760px) {
+      .shell { padding: 0 16px 40px; }
+      .about { display: none; }
+      .intro { grid-template-columns: 1fr; padding: 28px 0 18px; }
+      .intro p { font-size: 14px; }
+      .dashboard { grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0 24px; }
+      .stat-number { font-size: 1.7rem; }
+      .trend { padding: 18px; }
+      .chart { height: 80px; gap: 4px; }
+      .bar-wrapper { height: 65px; }
+      .toolbar { grid-template-columns: 1fr; gap: 8px; }
+      .filters { overflow: auto; -webkit-overflow-scrolling: touch; }
+      .filter { height: 42px; padding: 0 14px; font-size: 13px; }
+      .year-select { height: 42px; }
+      .decision { grid-template-columns: 1fr 40px; gap: 10px; padding: 18px; }
+      .date { grid-column: 1 / -1; font-size: 13px; }
+      .date small { display: inline; margin-left: 7px; }
+      .facts { grid-template-columns: 1fr; }
+      .meta { align-items: flex-start; gap: 14px; }
+      footer { display: block; }
+      .pagination { flex-wrap: wrap; }
+    }
   </style>
 </head>
 <body>
   <div class="shell">
-    <header><div class="brand"><span class="mark">K</span><span>Karşıyaka Ne Karar Verdi?</span></div><a class="about" href="#metodoloji">Kaynak ve yöntem</a></header>
-    <section class="intro"><h1>Mecliste ne oldu,<br>iki dakikada öğren.</h1><p>Karşıyaka Belediye Meclisi kararlarının sade özeti. Her kayıt doğrudan resmî belgesine bağlıdır.</p></section>
-    <section class="toolbar" aria-label="Kararları filtrele">
-      <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Mahalle, konu veya karar ara…" aria-label="Kararlarda ara"></label>
-      <div class="filters" role="group" aria-label="Konu filtresi"><button class="filter active" data-filter="Tümü">Tümü</button><button class="filter" data-filter="İmar">İmar</button><button class="filter" data-filter="Mali">Mali</button><button class="filter" data-filter="Kültür">Kültür</button><button class="filter" data-filter="Yönetim">Yönetim</button></div>
+    <header>
+      <div class="brand">
+        <span class="mark">K</span>
+        <span>Karşıyaka Ne Karar Verdi?</span>
+      </div>
+      <a class="about" href="#metodoloji">Kaynak ve yöntem</a>
+    </header>
+
+    <section class="intro">
+      <h1>Mecliste ne oldu,<br><span>iki dakikada</span> öğren.</h1>
+      <p>Karşıyaka Belediye Meclisi kararlarının sade özeti. Her kayıt doğrudan resmî belgesine bağlıdır.</p>
     </section>
-    <div class="meta"><strong id="count">2 karar</strong><span class="status"><span class="dot"></span>Kaynakları doğrulandı</span></div>
+
+    <!-- ── Dashboard ──────────────────────────────────────────── -->
+    <section class="dashboard" id="dashboard" aria-label="Özet istatistikler">
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-number" id="statTotal">0</div>
+        <div class="stat-label">Toplam Karar</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏗️</div>
+        <div class="stat-number" id="statImar">0</div>
+        <div class="stat-label">İmar Kararı</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-number" id="statMali">0</div>
+        <div class="stat-label">Mali Karar</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🎭</div>
+        <div class="stat-number" id="statKultur">0</div>
+        <div class="stat-label">Kültür & Yönetim</div>
+      </div>
+    </section>
+
+    <!-- ── Aylık Trend Grafiği ────────────────────────────────── -->
+    <section class="trend" id="trendSection" aria-label="Aylık karar trendi">
+      <div class="trend-header">
+        <div>
+          <div class="trend-title">Aylık Karar Trendi</div>
+          <div class="trend-subtitle">Ay bazında alınan karar sayıları</div>
+        </div>
+      </div>
+      <div class="chart" id="chart"></div>
+    </section>
+
+    <!-- ── Toolbar ────────────────────────────────────────────── -->
+    <section class="toolbar" aria-label="Kararları filtrele">
+      <label class="search">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="search" type="search" placeholder="Mahalle, konu veya karar ara…" aria-label="Kararlarda ara">
+      </label>
+      <div class="filters" role="group" aria-label="Konu filtresi">
+        <button class="filter active" data-filter="Tümü">Tümü</button>
+        <button class="filter" data-filter="İmar">İmar</button>
+        <button class="filter" data-filter="Mali">Mali</button>
+        <button class="filter" data-filter="Kültür">Kültür</button>
+        <button class="filter" data-filter="Yönetim">Yönetim</button>
+      </div>
+      <select class="year-select" id="yearSelect" aria-label="Yıl filtresi"></select>
+    </section>
+
+    <div class="meta">
+      <strong id="count">0 karar</strong>
+      <span class="status"><span class="dot"></span>Kaynakları doğrulandı</span>
+    </div>
+
     <main class="list" id="list"></main>
-    <section class="notice" id="metodoloji"><strong>Nasıl çalışıyor?</strong> Yalnızca belediyenin yayımladığı karar özetleri ve komisyon raporları kullanılır. Özetler kararın yerine geçmez; hukuki ve teknik ayrıntı için kaynak belgeyi açın.</section>
-    <footer><span>Bağımsız ve açık bir yerel yönetim takip denemesidir.</span><span>Son güncelleme: 26 Eylül 2026</span></footer>
+
+    <!-- ── Sayfalama ──────────────────────────────────────────── -->
+    <nav class="pagination" id="pagination" aria-label="Sayfalama"></nav>
+
+    <section class="notice" id="metodoloji">
+      <strong>Nasıl çalışıyor?</strong> Yalnızca belediyenin yayımladığı karar özetleri ve komisyon raporları kullanılır. Özetler kararın yerine geçmez; hukuki ve teknik ayrıntı için kaynak belgeyi açın.
+    </section>
+
+    <footer>
+      <span>Bağımsız ve açık bir yerel yönetim takip denemesidir.</span>
+      <span id="lastUpdated"></span>
+    </footer>
   </div>
-  <dialog id="detail"><div class="panel"><div class="panel-top"><div><span class="tag" id="dTag"></span><span id="dDate"></span></div><button class="close" aria-label="Kapat">×</button></div><h3 id="dTitle"></h3><p id="dText"></p><div class="facts"><div class="fact"><small>Sonuç</small><strong id="dResult"></strong></div><div class="fact"><small>Karar türü</small><strong id="dType"></strong></div><div class="fact"><small>Yer</small><strong id="dPlace"></strong></div></div><a class="source" id="dSource" target="_blank" rel="noopener">Resmî belgeyi aç ↗</a></div></dialog>
+
+  <!-- ── Modal ────────────────────────────────────────────────── -->
+  <dialog id="detail">
+    <div class="panel">
+      <div class="panel-top">
+        <div><span class="tag" id="dTag"></span><span id="dDate" style="color:var(--muted);font-size:14px"></span></div>
+        <div class="panel-actions">
+          <button class="share-btn" id="shareBtn" aria-label="Bağlantıyı kopyala">🔗 Paylaş</button>
+          <button class="close" aria-label="Kapat">×</button>
+        </div>
+      </div>
+      <h3 id="dTitle"></h3>
+      <div id="dVotes" class="votes"></div>
+      <p class="panel-text" id="dText"></p>
+      <div class="facts">
+        <div class="fact"><small>Sonuç</small><strong id="dResult"></strong></div>
+        <div class="fact"><small>Müdürlük</small><strong id="dType"></strong></div>
+        <div class="fact"><small>Yer</small><strong id="dPlace"></strong></div>
+      </div>
+      <a class="source" id="dSource" target="_blank" rel="noopener">Resmî belgeyi aç ↗</a>
+    </div>
+  </dialog>
+
   <script>
-    let decisions=[];
-    const list=document.querySelector('#list'),search=document.querySelector('#search'),count=document.querySelector('#count'),dialog=document.querySelector('#detail');let active='Tümü';
-    const formatDate=value=>new Intl.DateTimeFormat('tr-TR',{day:'numeric',month:'long',year:'numeric'}).format(new Date(`${value}T12:00:00`));
-    function render(){const q=search.value.toLocaleLowerCase('tr');const filtered=decisions.filter(d=>(active==='Tümü'||d.tag===active)&&`${d.title} ${d.text} ${d.place} ${d.tag} ${d.decisionNo||''}`.toLocaleLowerCase('tr').includes(q)).sort((a,b)=>b.date.localeCompare(a.date)||Number(b.decisionNo||0)-Number(a.decisionNo||0));count.textContent=`${filtered.length} karar`;list.innerHTML=filtered.length?filtered.map(d=>`<article class="decision" tabindex="0" role="button" aria-label="${d.title}" data-id="${d.id}"><div class="date">${formatDate(d.date)}<small>Karar no: ${d.decisionNo||'—'}</small></div><div><span class="tag ${d.tag==='İmar'?'amber':''}">${d.tag}</span><h2>${d.title}</h2><p>${d.text}</p></div><span class="arrow" aria-hidden="true">→</span></article>`).join(''):'<div class="empty"><strong>Bu aramaya uygun karar yok.</strong><br>Başka bir kelime deneyin.</div>';document.querySelectorAll('.decision').forEach(el=>{el.onclick=()=>openDetail(el.dataset.id);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDetail(el.dataset.id)}}})}
-    function openDetail(id){const d=decisions.find(x=>x.id===id);dTag.textContent=d.tag;dTag.className=`tag ${d.tag==='İmar'?'amber':''}`;dDate.textContent=` · ${d.date}`;dTitle.textContent=d.title;dText.textContent=d.text;dResult.textContent=d.result;dType.textContent=d.type;dPlace.textContent=d.place;dSource.href=d.source;dialog.showModal()}
-    search.addEventListener('input',render);document.querySelectorAll('.filter').forEach(btn=>btn.onclick=()=>{active=btn.dataset.filter;document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===btn));render()});document.querySelector('.close').onclick=()=>dialog.close();dialog.onclick=e=>{if(e.target===dialog)dialog.close()};
-    fetch('./data/decisions.json').then(r=>{if(!r.ok)throw new Error('Veri yüklenemedi');return r.json()}).then(data=>{decisions=data;render()}).catch(()=>{list.innerHTML='<div class="empty"><strong>Kararlar şu anda yüklenemiyor.</strong><br>Lütfen daha sonra yeniden deneyin.</div>';count.textContent='Veri hatası'});
+    /* ════════════════════════════════════════════════════════════
+       Karşıyaka Meclis Açık — Frontend
+       ════════════════════════════════════════════════════════════ */
+
+    let decisions = [];
+    let currentPage = 1;
+    const PER_PAGE = 20;
+
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => document.querySelectorAll(sel);
+
+    const list       = $('#list');
+    const search     = $('#search');
+    const count      = $('#count');
+    const dialog     = $('#detail');
+    const yearSelect = $('#yearSelect');
+
+    let activeTag  = 'Tümü';
+    let activeYear = 'Tümü';
+
+    const MONTH_NAMES = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+
+    const formatDate = value =>
+      new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
+        .format(new Date(`${value}T12:00:00`));
+
+    function tagClass(tag) {
+      const map = { 'İmar': 'tag-imar', 'Mali': 'tag-mali', 'Kültür': 'tag-kultur', 'Yönetim': 'tag-yonetim' };
+      return map[tag] || 'tag-yonetim';
+    }
+
+    /* ── Filtreleme ─────────────────────────────────────────────── */
+    function getFiltered() {
+      const q = search.value.toLocaleLowerCase('tr');
+      return decisions
+        .filter(d => {
+          if (activeTag !== 'Tümü' && d.tag !== activeTag) return false;
+          if (activeYear !== 'Tümü' && !d.date.startsWith(activeYear)) return false;
+          if (q) {
+            const hay = `${d.title} ${d.text} ${d.place} ${d.tag} ${d.department || d.type || ''} ${d.decisionNo || ''}`
+              .toLocaleLowerCase('tr');
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        })
+        .sort((a, b) => b.date.localeCompare(a.date) || Number(b.decisionNo || 0) - Number(a.decisionNo || 0));
+    }
+
+    /* ── Dashboard İstatistikleri ───────────────────────────────── */
+    function animateCounter(el, target) {
+      const duration = 600;
+      const start = performance.now();
+      const from = 0;
+      function step(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3); // easeOutCubic
+        el.textContent = Math.round(from + (target - from) * ease);
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    function updateDashboard(filtered) {
+      const tags = { 'İmar': 0, 'Mali': 0, 'Kültür': 0, 'Yönetim': 0 };
+      filtered.forEach(d => { if (tags[d.tag] !== undefined) tags[d.tag]++; });
+
+      animateCounter($('#statTotal'), filtered.length);
+      animateCounter($('#statImar'), tags['İmar']);
+      animateCounter($('#statMali'), tags['Mali']);
+      animateCounter($('#statKultur'), tags['Kültür'] + tags['Yönetim']);
+    }
+
+    /* ── Aylık Trend Grafiği ────────────────────────────────────── */
+    function updateChart(filtered) {
+      const months = {};
+      filtered.forEach(d => {
+        const m = d.date.slice(0, 7);
+        months[m] = (months[m] || 0) + 1;
+      });
+
+      const sorted = Object.entries(months).sort((a, b) => a[0].localeCompare(b[0]));
+      const max = Math.max(...sorted.map(x => x[1]), 1);
+      const chart = $('#chart');
+
+      chart.innerHTML = sorted.map(([month, cnt]) => {
+        const h = Math.max((cnt / max) * 100, 6);
+        const label = MONTH_NAMES[parseInt(month.slice(5)) - 1] || month.slice(5);
+        return `
+          <div class="bar-group">
+            <div class="bar-wrapper">
+              <div class="bar" style="height:${h}%"><span class="bar-value">${cnt}</span></div>
+            </div>
+            <span class="bar-label">${label}</span>
+          </div>`;
+      }).join('');
+
+      // Animasyon — başlangıçta 0 yükseklikten açılsın
+      requestAnimationFrame(() => {
+        chart.querySelectorAll('.bar').forEach(bar => {
+          const h = bar.style.height;
+          bar.style.height = '0%';
+          requestAnimationFrame(() => { bar.style.height = h; });
+        });
+      });
+    }
+
+    /* ── Render ─────────────────────────────────────────────────── */
+    function render() {
+      const filtered = getFiltered();
+      currentPage = Math.min(currentPage, Math.max(1, Math.ceil(filtered.length / PER_PAGE)));
+
+      const totalPages = Math.ceil(filtered.length / PER_PAGE);
+      const start = (currentPage - 1) * PER_PAGE;
+      const page = filtered.slice(start, start + PER_PAGE);
+
+      count.textContent = `${filtered.length} karar`;
+
+      updateDashboard(filtered);
+      updateChart(filtered);
+
+      list.innerHTML = page.length
+        ? page.map(d => `
+            <article class="decision" tabindex="0" role="button" aria-label="${escHtml(d.title)}" data-id="${d.id}">
+              <div class="date">${formatDate(d.date)}<small>Karar no: ${d.decisionNo || '—'}</small></div>
+              <div>
+                <span class="tag ${tagClass(d.tag)}">${d.tag}</span>
+                <h2>${escHtml(d.title)}</h2>
+                <p>${escHtml(d.text.length > 180 ? d.text.slice(0, 177) + '…' : d.text)}</p>
+              </div>
+              <span class="arrow" aria-hidden="true">→</span>
+            </article>`).join('')
+        : '<div class="empty"><strong>Bu aramaya uygun karar yok.</strong><br>Başka bir kelime deneyin.</div>';
+
+      $$('.decision').forEach(el => {
+        el.onclick = () => openDetail(el.dataset.id);
+        el.onkeydown = e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(el.dataset.id); }
+        };
+      });
+
+      renderPagination(filtered.length, totalPages);
+    }
+
+    function escHtml(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    /* ── Sayfalama ──────────────────────────────────────────────── */
+    function renderPagination(total, totalPages) {
+      const el = $('#pagination');
+      if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+      let html = `<button class="page-btn" ${currentPage <= 1 ? 'disabled' : ''} data-page="${currentPage - 1}">‹ Önceki</button>`;
+      html += `<span class="page-info">${currentPage} / ${totalPages}</span>`;
+      html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} data-page="${currentPage + 1}">Sonraki ›</button>`;
+      el.innerHTML = html;
+
+      el.querySelectorAll('.page-btn').forEach(btn => {
+        btn.onclick = () => {
+          const p = parseInt(btn.dataset.page);
+          if (p >= 1 && p <= totalPages) {
+            currentPage = p;
+            render();
+            list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        };
+      });
+    }
+
+    /* ── Yıl filtresi doldur ────────────────────────────────────── */
+    function populateYears() {
+      const years = [...new Set(decisions.map(d => d.date.slice(0, 4)))].sort().reverse();
+      yearSelect.innerHTML = '<option value="Tümü">Tüm yıllar</option>' +
+        years.map(y => `<option value="${y}">${y}</option>`).join('');
+    }
+
+    /* ── Karar Detay (Modal + Permalink) ────────────────────────── */
+    function openDetail(id) {
+      const d = decisions.find(x => x.id === id);
+      if (!d) return;
+
+      $('#dTag').textContent = d.tag;
+      $('#dTag').className = `tag ${tagClass(d.tag)}`;
+      $('#dDate').textContent = `  ·  ${formatDate(d.date)}  ·  Karar no: ${d.decisionNo || '—'}`;
+      $('#dTitle').textContent = d.title;
+      $('#dText').textContent = d.text;
+      $('#dResult').textContent = d.result;
+      $('#dType').textContent = d.department || d.type;
+      $('#dPlace').textContent = d.place;
+      $('#dSource').href = d.source;
+
+      // Oy dağılımı
+      const votesEl = $('#dVotes');
+      votesEl.innerHTML = '';
+      const v = d.votes;
+      if (v && v.type === 'unanimous') {
+        votesEl.innerHTML = '<span class="votes-pill unanimous">✓ Oybirliğiyle</span>';
+      } else if (v && v.type === 'majority') {
+        let html = '<span class="votes-pill majority">Oyçokluğuyla</span>';
+        if (v.against) html += `<span class="votes-note">${v.against} ret oyu</span>`;
+        if (v.abstain) html += `<span class="votes-note">${v.abstain} çekimser</span>`;
+        votesEl.innerHTML = html;
+      }
+
+      // Sonuç metninden oy tipini çıkart (JSON'da votes yoksa)
+      if (!v || v.type === 'other') {
+        if (/oybirliği/i.test(d.result)) {
+          votesEl.innerHTML = '<span class="votes-pill unanimous">✓ Oybirliğiyle</span>';
+        } else if (/oyçokluğu/i.test(d.result)) {
+          votesEl.innerHTML = '<span class="votes-pill majority">Oyçokluğuyla</span>';
+        }
+      }
+
+      history.replaceState(null, '', `#${id}`);
+      dialog.showModal();
+    }
+
+    function closeDetail() {
+      dialog.close();
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+
+    /* ── Paylaş ─────────────────────────────────────────────────── */
+    $('#shareBtn').onclick = () => {
+      navigator.clipboard.writeText(location.href).then(() => {
+        const btn = $('#shareBtn');
+        btn.textContent = '✓ Kopyalandı';
+        setTimeout(() => { btn.innerHTML = '🔗 Paylaş'; }, 2000);
+      });
+    };
+
+    /* ── Olaylar ─────────────────────────────────────────────────── */
+    let searchTimeout;
+    search.addEventListener('input', () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => { currentPage = 1; render(); }, 150);
+    });
+
+    $$('.filter').forEach(btn =>
+      btn.onclick = () => {
+        activeTag = btn.dataset.filter;
+        $$('.filter').forEach(x => x.classList.toggle('active', x === btn));
+        currentPage = 1;
+        render();
+      }
+    );
+
+    yearSelect.addEventListener('change', () => {
+      activeYear = yearSelect.value;
+      currentPage = 1;
+      render();
+    });
+
+    $('.close').onclick = closeDetail;
+    dialog.onclick = e => { if (e.target === dialog) closeDetail(); };
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && dialog.open) closeDetail(); });
+
+    window.addEventListener('hashchange', () => {
+      const id = location.hash.slice(1);
+      if (id && decisions.length) openDetail(id);
+    });
+
+    /* ── Dinamik footer tarihi ──────────────────────────────────── */
+    function updateFooterDate(data) {
+      const latest = data.map(d => d.date).sort().at(-1);
+      if (!latest) return;
+      const formatted = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
+        .format(new Date(`${latest}T12:00:00`));
+      const el = $('#lastUpdated');
+      if (el) el.textContent = `Son güncelleme: ${formatted}`;
+    }
+
+    /* ── Veri Yükleme ───────────────────────────────────────────── */
+    fetch('./data/decisions.json')
+      .then(r => { if (!r.ok) throw new Error('Veri yüklenemedi'); return r.json(); })
+      .then(data => {
+        decisions = data;
+        populateYears();
+        updateFooterDate(data);
+        render();
+        const id = location.hash.slice(1);
+        if (id) openDetail(id);
+      })
+      .catch(() => {
+        list.innerHTML = '<div class="empty"><strong>Kararlar şu anda yüklenemiyor.</strong><br>Lütfen daha sonra yeniden deneyin.</div>';
+        count.textContent = 'Veri hatası';
+      });
   </script>
 </body>
 </html>

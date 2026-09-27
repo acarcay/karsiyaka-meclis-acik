@@ -39,7 +39,15 @@ for (const record of existing.filter((x) => x.reviewed)) {
 merged.sort((a, b) => b.date.localeCompare(a.date) || Number(b.decisionNo || 0) - Number(a.decisionNo || 0));
 await writeFile(outputFile, `${JSON.stringify(merged, null, 2)}\n`);
 
-console.log(JSON.stringify({ year, documents: pdfUrls.length, decisions: merged.length, reviewed: merged.filter((x) => x.reviewed).length, pending_review: merged.filter((x) => !x.reviewed).length }));
+console.log(JSON.stringify({
+  year,
+  documents: pdfUrls.length,
+  decisions: merged.length,
+  reviewed: merged.filter((x) => x.reviewed).length,
+  pending_review: merged.filter((x) => !x.reviewed).length,
+}));
+
+// ─── Yardımcı: HTTP ─────────────────────────────────────────────────────────
 
 async function fetchText(url) {
   const response = await fetch(url, { headers: { 'user-agent': 'KarsiyakaMeclisAcik/1.0' } });
@@ -53,10 +61,118 @@ async function download(url, destination) {
   await writeFile(destination, Buffer.from(await response.arrayBuffer()));
 }
 
+// ─── Yardımcı: Tarih ────────────────────────────────────────────────────────
+
 function dateFromFilename(url) {
   const match = basename(new URL(url).pathname).match(/(\d{2})\.(\d{2})\.(\d{4})/);
   return match ? `${match[3]}-${match[2]}-${match[1]}` : '0000-00-00';
 }
+
+// ─── Kritik 1: `type` / `department` normalizasyonu ─────────────────────────
+// Ham PDF'den gelen BÜYÜK HARF müdürlük adlarını okunabilir forma çevirir.
+// Eşleşme yoksa MÜDÜRLÜĞÜ ekini kırpar ve titleCase uygular.
+
+const DEPT_MAP = [
+  [/YAZI\s+İŞLERİ/i,                          'Yazı İşleri'],
+  [/MALİ\s+HİZMETLER/i,                       'Mali Hizmetler'],
+  [/DESTEK\s+HİZMETLERİ/i,                    'Destek Hizmetleri'],
+  [/RUHSAT\s+VE\s+DENETİM/i,                  'Ruhsat ve Denetim'],
+  [/BASIN.*HALKLA\s+İLİŞKİLER/i,              'Basın ve Halkla İlişkiler'],
+  [/PARK\s+VE\s+BAHÇELER/i,                   'Park ve Bahçeler'],
+  [/VETERİNER\s+İŞLERİ/i,                     'Veteriner İşleri'],
+  [/ZABITA/i,                                  'Zabıta'],
+  [/KADIN\s+VE\s+AİLE/i,                      'Kadın ve Aile Hizmetleri'],
+  [/GELİRLER/i,                               'Gelirler'],
+  [/İNSAN\s+KAYNAKLARI/i,                     'İnsan Kaynakları'],
+  [/İMAR\s+VE\s+ŞEHİRCİLİK/i,                'İmar ve Şehircilik'],
+  [/KÜLTÜR\s+VE\s+SOSYAL/i,                   'Kültür ve Sosyal İşler'],
+  [/SAĞLIK\s+İŞLERİ/i,                        'Sağlık İşleri'],
+  [/FEN\s+İŞLERİ/i,                           'Fen İşleri'],
+  [/ÇEVRE\s+KORUMA/i,                         'Çevre Koruma'],
+  [/HUKUK\s+İŞLERİ/i,                         'Hukuk İşleri'],
+  [/STRATEJİ\s+GELİŞTİRME/i,                 'Strateji Geliştirme'],
+  [/EMLAK\s+VE\s+İSTİMLAK/i,                  'Emlak ve İstimlak'],
+  [/YAPI\s+KONTROL/i,                          'Yapı Kontrol'],
+  [/BİLGİ\s+İŞLEM/i,                          'Bilgi İşlem'],
+  [/TEMİZLİK\s+İŞLERİ/i,                      'Temizlik İşleri'],
+  [/ULAŞIM\s+HİZMETLERİ/i,                    'Ulaşım Hizmetleri'],
+  [/SOSYAL\s+YARDIM/i,                         'Sosyal Yardım'],
+  [/SPOR\s+HİZMETLERİ/i,                       'Spor Hizmetleri'],
+];
+
+function normalizeDepartment(raw) {
+  for (const [pattern, label] of DEPT_MAP) {
+    if (pattern.test(raw)) return label;
+  }
+  // Fallback: MÜDÜRLÜĞÜ ekini kırp + titleCase
+  return titleCase(raw.replace(/\s*MÜDÜRLÜĞÜ\s*$/i, '').trim());
+}
+
+// ─── Kritik 3: Oy dağılımı parse ────────────────────────────────────────────
+// "Dört meclis üyesi ret oyu verdi" gibi ifadeleri yapısal veriye çevirir.
+
+const WORD_TO_NUM = {
+  bir: 1, iki: 2, üç: 3, dört: 4, beş: 5, altı: 6, yedi: 7,
+  sekiz: 8, dokuz: 9, on: 10, onbir: 11, oniki: 12, onüç: 13,
+  ondört: 14, onbeş: 15, onaltı: 16, onyedi: 17, onsekiz: 18,
+  ondokuz: 19, yirmi: 20, yirmibir: 21, yirmiiki: 22,
+};
+
+function wordToNum(word) {
+  const clean = word.toLocaleLowerCase('tr-TR').replace(/\s+/g, '');
+  return WORD_TO_NUM[clean] ?? NaN;
+}
+
+function parseVotes(text, resultText) {
+  if (/OY\s+BİRLİĞİ\s+İLE/i.test(resultText || text)) {
+    return { type: 'unanimous' };
+  }
+  // "X üye/meclis üyesi ret oyu" veya "X ret oyuna karşı"
+  const againstMatch = text.match(/(\w+)\s+(?:meclis\s+)?üye(?:si)?\s+ret\s+oyu/i);
+  if (againstMatch) {
+    const n = wordToNum(againstMatch[1]);
+    if (!isNaN(n)) return { type: 'majority', against: n };
+  }
+  // "X çekimser"
+  const abstainMatch = text.match(/(\w+)\s+çekimser/i);
+  if (abstainMatch) {
+    const n = wordToNum(abstainMatch[1]);
+    if (!isNaN(n)) return { type: 'majority', abstain: n };
+  }
+  if (/OY\s+ÇOKLUĞU\s+İLE/i.test(resultText || text)) {
+    return { type: 'majority' };
+  }
+  return { type: 'other' };
+}
+
+// ─── Kritik 2: `makeTitle()` iyileştirme ────────────────────────────────────
+// Ham bürokratik metindeki kalıp ifadeleri temizler ve kısa, anlamlı başlık üretir.
+
+const CLEANUP_PATTERNS = [
+  // "…hakkında komisyon raporu okunarak görüşüldü" gibi kalıplar
+  [/\s+hakkında\s+(?:ihtisas\s+)?komisyon\s+raporu\s+.*$/i, ''],
+  // "…hakkında önerge" / "hususunda önerge"
+  [/\s+(?:hakkında|hususunda)\s+(?:verilen\s+)?önerge.*$/i, ''],
+  // "…ile ilgili yazı/dilekçe"
+  [/\s+(?:ile\s+)?ilgili\s+(?:belediye\s+)?(?:yazı|dilekçe|yazısı).*$/i, ''],
+  // Başta gelen "… sayılı meclis kararı…" uzun referansları
+  [/^\d{2}\.\d{2}\.\d{4}\s+tarihli.*?(?=,\s+[A-ZÇĞİÖŞÜ"«])/s, ''],
+  // "… tarihli ve … sayılı …" referansları
+  [/\d{2}\.\d{2}\.\d{4}\s+tarihli\s+ve\s+[\w/]+\s+sayılı\s+meclis\s+kararıyla\s+/gi, ''],
+];
+
+function makeTitle(text) {
+  let clean = text.trim();
+  for (const [pattern, replacement] of CLEANUP_PATTERNS) {
+    clean = clean.replace(pattern, replacement).trim();
+  }
+  // İlk anlamlı cümle
+  const sentence = clean.split(/(?<=[.!?])\s/)[0].trim();
+  // 145 karakter sınırı
+  return sentence.length > 145 ? `${sentence.slice(0, 142).trim()}…` : sentence;
+}
+
+// ─── Ana parse fonksiyonu ────────────────────────────────────────────────────
 
 function parseDecisions(input, source, date) {
   const text = input.replace(/\s+/g, ' ').replace(/((?:KABUL|RET)\s+EDİLDİ)\s*:\s*(\d+)/gi, '$1 KARAR NO:$2').trim();
@@ -70,32 +186,32 @@ function parseDecisions(input, source, date) {
     const start = starts.at(-1);
     let body = before.slice(start.index + start[0].indexOf(start[1]) + start[1].length).replace(/^\s*-?\s*\([^)]+\)\s*/, '').trim();
     const resultMatch = body.match(/(OY\s+BİRLİĞİ\s+İLE\s+(?:KABUL|RET)\s+EDİLDİ|OY\s+ÇOKLUĞU\s+İLE\s+(?:KABUL|RET)\s+EDİLDİ|(?:görev[^.]{0,90})?SEÇİLDİ)\.?\s*$/i);
-    const result = resultMatch ? titleCase(resultMatch[1]) : 'Karara bağlandı';
+    const resultRaw = resultMatch ? resultMatch[1] : null;
+    const result = resultRaw ? titleCase(resultRaw) : 'Karara bağlandı';
     if (resultMatch) body = body.slice(0, resultMatch.index).trim();
     body = body.replace(/^(?:\d+\s*-\s*)?\([^)]+\)\s*/, '').trim();
-    const department = start[2].split('-')[0].trim();
+    const rawDepartment = start[2].split('-')[0].trim();
+    const department = normalizeDepartment(rawDepartment); // Kritik 1
     records.push({
       id: `${date}-${decisionNo}`,
       date,
       decisionNo,
-      tag: classify(`${department} ${body}`),
-      title: makeTitle(body),
+      tag: classify(`${rawDepartment} ${body}`),
+      title: makeTitle(body),                              // Kritik 2
       text: body,
       result,
-      type: department,
+      votes: parseVotes(body, resultRaw),                 // Kritik 3
+      department,                                          // Kritik 1 — normalize edilmiş
+      type: department,                                    // geriye dönük uyumluluk için korundu
       place: extractPlace(body),
       source,
-      reviewed: false
+      reviewed: false,
     });
   }
   return records;
 }
 
-function makeTitle(text) {
-  const clean = text.replace(/\s+(hakkında|hususunda)\s+(önerge|raporu).*$/i, '').trim();
-  const sentence = clean.split(/(?<=[.!?])\s/)[0];
-  return sentence.length > 145 ? `${sentence.slice(0, 142).trim()}…` : sentence;
-}
+// ─── Diğer yardımcılar ──────────────────────────────────────────────────────
 
 function classify(text) {
   if (/imar|parsel|plan değişikliği|taşınmaz|intifa/i.test(text)) return 'İmar';

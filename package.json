@@ -1,0 +1,23 @@
+{
+  "name": "karsiyaka-meclis-acik",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Karşıyaka Belediye Meclisi kararlarını sade Türkçeyle sunan açık veri projesi",
+  "type": "module",
+  "scripts": {
+    "update": "node scripts/import-decisions.mjs",
+    "update:2025": "node scripts/import-decisions.mjs 2025",
+    "update:2026": "node scripts/import-decisions.mjs 2026",
+    "serve": "npx -y serve dist -l 8080",
+    "dev": "npx -y serve dist -l 8080"
+  },
+  "keywords": [
+    "karsiyaka",
+    "belediye",
+    "meclis",
+    "acik-veri",
+    "sivil-teknoloji"
+  ],
+  "author": "",
+  "license": "MIT"
+}
