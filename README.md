@@ -2,7 +2,7 @@
 
 Karşıyaka Belediye Meclisi kararlarını sade Türkçeyle sunan, bağımsız ve açık kaynak bir sivil teknoloji projesi.
 
-🔗 **[Siteyi Aç →](https://karsiyaka-meclis.netlify.app)**
+🔗 **[Siteyi Aç →](https://karsiyaka-meclis-acik.netlify.app/)**
 
 ---
 
