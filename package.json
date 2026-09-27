@@ -9,7 +9,8 @@
     "update:2025": "node scripts/import-decisions.mjs 2025",
     "update:2026": "node scripts/import-decisions.mjs 2026",
     "serve": "npx -y serve dist -l 8080",
-    "dev": "npx -y serve dist -l 8080"
+    "dev": "npx -y serve dist -l 8080",
+    "test": "node --test"
   },
   "keywords": [
     "karsiyaka",

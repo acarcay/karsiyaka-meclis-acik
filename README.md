@@ -1,6 +1,6 @@
 # Karşıyaka Ne Karar Verdi?
 
-Karşıyaka Belediye Meclisi kararlarını sade Türkçeyle sunan, bağımsız ve açık kaynak bir sivil teknoloji projesi.
+Karşıyaka Belediye Meclisi kararlarını resmî belgelerden otomatik aktaran, bağımsız ve açık kaynak bir sivil teknoloji projesi. Belediyenin resmî sitesi değildir.
 
 🔗 **[Siteyi Aç →](https://karsiyaka-meclis-acik.netlify.app/)**
 
@@ -80,3 +80,12 @@ Elle tetiklemek için: GitHub repo → Actions → "Kararları Güncelle" → "R
 ## Lisans
 
 MIT
+
+## Yayın ve veri güvenilirliği
+
+- `npm test` ayrıştırma, tarih, Türkçe oy sayısı ve arşiv koruma kontrollerini çalıştırır.
+- Güncelleme diğer yılları korur; eksik ayrıştırma veya tekrarlanan karar varsa yayındaki veri değiştirilmez.
+- Tüm kayıtlar otomatik aktarım olarak sunulur; insan tarafından doğrulandığı iddia edilmez. Otomatik başlıklar özet değildir ve aktarım hataları olabilir. Mevcut kayıtların tamamında `reviewed: false` kullanılır.
+- `dist/data/status.json` içindeki `checkedAt` yalnızca başarılı çevrimiçi kaynak kontrolünden sonra güncellenir. En yeni karar tarihi bundan ayrıdır.
+- İletişim ve düzeltme talepleri GitHub Issues üzerinden alınır. Herkese açık bildirimlere hassas bilgi eklenmemelidir.
+- Yayına alınacak klasör `dist/` klasörüdür. Yerel değişiklikler Netlify'a yeniden dağıtılana kadar canlı siteye yansımaz.

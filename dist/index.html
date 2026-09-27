@@ -4,19 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Karşıyaka Ne Karar Verdi?</title>
-  <meta name="description" content="Karşıyaka Belediye Meclisi kararlarını sade Türkçeyle arayın ve resmî belgelerine ulaşın.">
+  <meta name="description" content="Karşıyaka Belediye Meclisi kararlarını arayın ve resmî belgelerine ulaşın. Bağımsız bir sivil teknoloji projesi.">
   <!-- OG Meta — sosyal medya paylaşım kartı -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Karşıyaka Ne Karar Verdi?">
-  <meta property="og:description" content="Belediye meclisi kararlarının sade özeti. Her kayıt doğrudan resmî belgesine bağlıdır.">
-  <meta property="og:url" content="https://karsiyaka-meclis.netlify.app">
-  <meta property="og:image" content="https://karsiyaka-meclis.netlify.app/og-image.jpg">
+  <meta property="og:description" content="Belediye meclisi kararlarına resmî kaynaklarıyla ulaşın. Her kayıt doğrudan resmî belgesine bağlıdır.">
+  <meta property="og:url" content="https://karsiyaka-meclis-acik.netlify.app">
+  <meta property="og:image" content="https://karsiyaka-meclis-acik.netlify.app/og-image.jpg">
   <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+  <meta property="og:image:height" content="669">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Karşıyaka Ne Karar Verdi?">
-  <meta name="twitter:description" content="Belediye meclisi kararlarının sade özeti.">
-  <meta name="twitter:image" content="https://karsiyaka-meclis.netlify.app/og-image.jpg">
+  <meta name="twitter:description" content="Belediye meclisi kararlarına resmî kaynaklarıyla ulaşın.">
+  <meta name="twitter:image" content="https://karsiyaka-meclis-acik.netlify.app/og-image.jpg">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b6047'/%3E%3Cpath d='M17 17v30M18 32l25-15M18 32l25 15' fill='none' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,6 +49,13 @@
       --radius-xs: 8px;
     }
 
+    .independence { color: var(--green); font-size: 13px; margin: 18px 0 0; }
+    .review-status { color: var(--muted); font-size: 12px; margin: 8px 0; }
+    .meta { flex-wrap: wrap; gap: 8px; }
+    #shareStatus { font-size: 13px; overflow-wrap: anywhere; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
     /* ── Reset & Temel ──────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; }
     body {
@@ -438,9 +445,10 @@
       <a class="about" href="#metodoloji">Kaynak ve yöntem</a>
     </header>
 
+    <p class="independence">Bağımsız bir sivil teknoloji projesi. Belediyenin resmî sitesi değildir.</p>
     <section class="intro">
       <h1>Mecliste ne oldu,<br><span>iki dakikada</span> öğren.</h1>
-      <p>Karşıyaka Belediye Meclisi kararlarının sade özeti. Her kayıt doğrudan resmî belgesine bağlıdır.</p>
+      <p>Karşıyaka Belediye Meclisi kararlarına resmî kaynaklarıyla ulaşın. Her kayıt doğrudan resmî belgesine bağlıdır.</p>
     </section>
 
     <!-- ── Dashboard ──────────────────────────────────────────── -->
@@ -496,7 +504,7 @@
 
     <div class="meta">
       <strong id="count">0 karar</strong>
-      <span class="status"><span class="dot"></span>Kaynakları doğrulandı</span>
+      <span class="status"><span class="dot"></span>Resmî kaynak bağlantılarıyla</span>
     </div>
 
     <main class="list" id="list"></main>
@@ -505,33 +513,39 @@
     <nav class="pagination" id="pagination" aria-label="Sayfalama"></nav>
 
     <section class="notice" id="metodoloji">
-      <strong>Nasıl çalışıyor?</strong> Yalnızca belediyenin yayımladığı karar özetleri ve komisyon raporları kullanılır. Özetler kararın yerine geçmez; hukuki ve teknik ayrıntı için kaynak belgeyi açın.
+      <strong>Nasıl çalışıyor?</strong> Belediyenin yayımladığı meclis karar özetleri otomatik aktarılır. Metin, başlık ve kategoriler aktarım hatası içerebilir. Arşiv eksiksiz olmayabilir. Bu metinler resmî kararın yerine geçmez; doğrulama ve ayrıntılar için kaynak belgeyi görüntüleyin.
     </section>
 
+    <section class="notice" id="gizlilik">
+      <strong>Gizlilik ve düzeltme talepleri</strong> Bu arayüz üyelik veya iletişim bilgisi istemez; aramalar tarayıcınızda yapılır. Barındırma ve yazı tipi hizmetleri teknik bağlantı verilerini işleyebilir. Kaynak belgeler ve hata bildirimi bağlantıları başka sitelere açılır. Hata bildirimi GitHub hesabı gerektirir ve herkese açıktır; kişisel veya hassas bilgi paylaşmayın. Düzeltme taleplerinde yalnızca karar numarasını ve sorunlu bölümü belirtin.
+    </section>
     <footer>
-      <span>Bağımsız ve açık bir yerel yönetim takip denemesidir.</span>
+      <span>Bağımsız ve açık bir yerel yönetim takip projesidir.<br><a href="https://github.com/acarcay/karsiyaka-meclis-acik/issues/new" target="_blank" rel="noopener noreferrer">İletişim / Hata bildir ↗</a> · <a href="#gizlilik">Gizlilik</a></span>
       <span id="lastUpdated"></span>
     </footer>
   </div>
 
   <!-- ── Modal ────────────────────────────────────────────────── -->
-  <dialog id="detail">
+  <dialog id="detail" aria-labelledby="dTitle">
     <div class="panel">
       <div class="panel-top">
         <div><span class="tag" id="dTag"></span><span id="dDate" style="color:var(--muted);font-size:14px"></span></div>
         <div class="panel-actions">
-          <button class="share-btn" id="shareBtn" aria-label="Bağlantıyı kopyala">🔗 Paylaş</button>
+          <button class="share-btn" id="shareBtn" aria-label="Kararı paylaş">🔗 Paylaş</button>
           <button class="close" aria-label="Kapat">×</button>
         </div>
       </div>
       <h3 id="dTitle"></h3>
+      <p id="dReview" class="review-status"></p>
       <div id="dVotes" class="votes"></div>
       <p class="panel-text" id="dText"></p>
       <div class="facts">
         <div class="fact"><small>Sonuç</small><strong id="dResult"></strong></div>
-        <div class="fact"><small>Müdürlük</small><strong id="dType"></strong></div>
+        <div class="fact"><small id="dTypeLabel">Müdürlük</small><strong id="dType"></strong></div>
         <div class="fact"><small>Yer</small><strong id="dPlace"></strong></div>
       </div>
+      <p id="shareStatus" role="status" aria-live="polite"></p>
+      <a id="reportIssue" target="_blank" rel="noopener noreferrer">Bu kayıtta hata bildir ↗</a>
       <a class="source" id="dSource" target="_blank" rel="noopener">Resmî belgeyi aç ↗</a>
     </div>
   </dialog>
@@ -664,6 +678,7 @@
               <div>
                 <span class="tag ${tagClass(d.tag)}">${d.tag}</span>
                 <h2>${escHtml(d.title)}</h2>
+                <div class="review-status">Resmî belgeden otomatik aktarıldı</div>
                 <p>${escHtml(d.text.length > 180 ? d.text.slice(0, 177) + '…' : d.text)}</p>
               </div>
               <span class="arrow" aria-hidden="true">→</span>
@@ -723,6 +738,10 @@
       $('#dDate').textContent = `  ·  ${formatDate(d.date)}  ·  Karar no: ${d.decisionNo || '—'}`;
       $('#dTitle').textContent = d.title;
       $('#dText').textContent = d.text;
+      $('#dReview').textContent = 'Resmî belgeden otomatik aktarılmıştır; aktarım hatası içerebilir. Kaynak belgeyi görüntüleyin.';
+      $('#shareStatus').textContent = '';
+      $('#reportIssue').href = 'https://github.com/acarcay/karsiyaka-meclis-acik/issues/new?title=' + encodeURIComponent(`Karar düzeltme talebi: ${d.id}`);
+      $('#dTypeLabel').textContent = d.department ? 'Müdürlük' : 'Kayıt türü';
       $('#dResult').textContent = d.result;
       $('#dType').textContent = d.department || d.type;
       $('#dPlace').textContent = d.place;
@@ -760,12 +779,22 @@
     }
 
     /* ── Paylaş ─────────────────────────────────────────────────── */
-    $('#shareBtn').onclick = () => {
-      navigator.clipboard.writeText(location.href).then(() => {
-        const btn = $('#shareBtn');
-        btn.textContent = '✓ Kopyalandı';
-        setTimeout(() => { btn.innerHTML = '🔗 Paylaş'; }, 2000);
-      });
+    $('#shareBtn').onclick = async () => {
+      const url = location.href;
+      const status = $('#shareStatus');
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: $('#dTitle').textContent, url });
+          status.textContent = 'Paylaşım tamamlandı.';
+        } else if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(url);
+          status.textContent = 'Bağlantı kopyalandı.';
+        } else {
+          status.textContent = `Bu bağlantıyı kopyalayabilirsiniz: ${url}`;
+        }
+      } catch (error) {
+        if (error.name !== 'AbortError') status.textContent = `Bu bağlantıyı kopyalayabilirsiniz: ${url}`;
+      }
     };
 
     /* ── Olaylar ─────────────────────────────────────────────────── */
@@ -806,7 +835,7 @@
       const formatted = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
         .format(new Date(`${latest}T12:00:00`));
       const el = $('#lastUpdated');
-      if (el) el.textContent = `Son güncelleme: ${formatted}`;
+      if (el) el.textContent = `En yeni karar: ${formatted}`;
     }
 
     /* ── Veri Yükleme ───────────────────────────────────────────── */
@@ -816,6 +845,10 @@
         decisions = data;
         populateYears();
         updateFooterDate(data);
+        fetch('./data/status.json').then(r => r.ok ? r.json() : null).then(status => {
+          if (!status?.checkedAt || !Number.isFinite(Date.parse(status.checkedAt))) return;
+          $('#lastUpdated').textContent += ' · Kaynak kontrolü: ' + new Intl.DateTimeFormat('tr-TR', { dateStyle: 'medium' }).format(new Date(status.checkedAt));
+        }).catch(() => {});
         render();
         const id = location.hash.slice(1);
         if (id) openDetail(id);
