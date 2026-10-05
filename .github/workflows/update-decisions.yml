@@ -35,6 +35,12 @@ jobs:
         env:
           NODE_OPTIONS: '--experimental-fetch'
 
+      - name: Hata durumunda kaynak bilgisi
+        if: failure()
+        run: |
+          echo "Güncelleme başarısız oldu. Ayrıntılı hata için 'Kararları çek ve güncelle' adımını açın."
+          echo "Belediye arşivi: https://www.karsiyaka.bel.tr/meclis-karar-ozetleri"
+
       - name: Değişiklik varsa commit + push
         run: |
           git config user.name  "github-actions[bot]"

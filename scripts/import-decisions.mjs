@@ -12,15 +12,35 @@ const year = process.argv.find((x) => /^20\d\d$/.test(x)) || String(new Date().g
 
 // ─── Yardımcı: HTTP ─────────────────────────────────────────────────────────
 
+async function fetchWithRetry(url, attempts = 3) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: { 'user-agent': 'KarsiyakaMeclisAcik/1.0' },
+        signal: AbortSignal.timeout(30000),
+      });
+      if (response.ok) return response;
+      lastError = new Error(`HTTP ${response.status} ${response.statusText}: ${url}`);
+      if (response.status < 500 && response.status !== 429) throw lastError;
+    } catch (error) {
+      lastError = error;
+    }
+    if (attempt < attempts) {
+      const delayMs = 1500 * attempt;
+      console.warn(`Kaynak isteği başarısız (deneme ${attempt}/${attempts}); ${delayMs} ms sonra yeniden denenecek: ${lastError.message}`);
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+    }
+  }
+  throw new Error(`Kaynağa ${attempts} denemede ulaşılamadı: ${lastError.message}`, { cause: lastError });
+}
+
 async function fetchText(url) {
-  const response = await fetch(url, { headers: { 'user-agent': 'KarsiyakaMeclisAcik/1.0' }, signal: AbortSignal.timeout(30000) });
-  if (!response.ok) throw new Error(`${response.status} ${url}`);
-  return response.text();
+  return (await fetchWithRetry(url)).text();
 }
 
 async function download(url, destination) {
-  const response = await fetch(url, { headers: { 'user-agent': 'KarsiyakaMeclisAcik/1.0' }, signal: AbortSignal.timeout(30000) });
-  if (!response.ok) throw new Error(`${response.status} ${url}`);
+  const response = await fetchWithRetry(url);
   await writeFile(destination, Buffer.from(await response.arrayBuffer()));
 }
 
