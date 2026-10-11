@@ -1,6 +1,6 @@
-# Karşıyaka Ne Karar Verdi?
+# İzmir'de Ne Karar Verildi?
 
-Karşıyaka Belediye Meclisi kararlarını resmî belgelerden otomatik aktaran, bağımsız ve açık kaynak bir sivil teknoloji projesi. Belediyenin resmî sitesi değildir.
+Karşıyaka ve İzmir Büyükşehir Belediye Meclisi kararlarını resmî belgelerden otomatik aktaran, bağımsız ve açık kaynak bir sivil teknoloji projesi. Belediyelerin resmî sitesi değildir.
 
 🔗 **[Siteyi Aç →](https://karsiyaka-meclis-acik.netlify.app/)**
 
@@ -11,6 +11,7 @@ Karşıyaka Belediye Meclisi kararlarını resmî belgelerden otomatik aktaran, 
 1. Karşıyaka Belediyesi'nin [meclis karar özetleri](https://www.karsiyaka.bel.tr/meclis-karar-ozetleri) sayfasından PDF'leri çeker
 2. `pdftotext` ile metne çevirir ve regex tabanlı parser ile yapısal veriye dönüştürür
 3. Sade bir web arayüzü ile vatandaşa sunar — arama, filtreleme, permalink
+4. İzmir Büyükşehir'in [tekil meclis kararları](https://www.izmir.bel.tr/tr/mecliskararlari/58) listesindeki en yeni 50 kararın PDF'lerini ayrıca işler; belediye filtresiyle iki kaynağı birlikte sunar.
 
 ## Hızlı Başlangıç
 
@@ -21,6 +22,7 @@ brew install poppler   # pdftotext için
 # Kararları çek
 npm run update         # Bu yılın kararlarını çeker
 npm run update:2025    # Belirli bir yıl
+npm run update:izmir    # Büyükşehir'in en yeni 50 kararını kontrol eder
 
 # Siteyi aç
 npm run dev            # http://localhost:8080
@@ -33,8 +35,10 @@ npm run dev            # http://localhost:8080
 │   ├── index.html           # Tek sayfa frontend (sıfır bağımlılık)
 │   └── data/
 │       └── decisions.json   # Üretilen karar verisi
+│       └── izmir-decisions.json # Büyükşehir kararları
 ├── scripts/
 │   └── import-decisions.mjs # PDF çekme + parse + JSON üretimi
+│   └── import-izmir.mjs     # Büyükşehir tekil kararlarını aktarma
 ├── .github/workflows/
 │   └── update-decisions.yml # Otomatik güncelleme (Pzt + Cuma)
 └── work/                    # PDF cache (gitignore)
@@ -45,6 +49,7 @@ npm run dev            # http://localhost:8080
 GitHub Actions her **Pazartesi ve Cuma sabah 09:00**'da (TR saati) otomatik çalışır:
 
 - Belediye sitesinden yeni PDF'leri kontrol eder
+- Büyükşehir'in en yeni 50 tekil kararını kontrol eder; ayrıştırılamayan belgeleri yayınlamaz
 - Varsa çeker, parse eder, `decisions.json`'u günceller
 - Commit + push yapar → site otomatik güncellenir
 
@@ -63,6 +68,7 @@ Elle tetiklemek için: GitHub repo → Actions → "Kararları Güncelle" → "R
 ```jsonc
 {
   "id": "2026-09-07-128",
+  "municipalityId": "karsiyaka", // Eski Karşıyaka kayıtlarında alan bulunmaz; arayüz Karşıyaka kabul eder
   "date": "2026-09-07",
   "decisionNo": "128",
   "tag": "İmar",               // İmar | Mali | Kültür | Yönetim

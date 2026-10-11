@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Karşıyaka Ne Karar Verdi?</title>
-  <meta name="description" content="Karşıyaka Belediye Meclisi kararlarını arayın ve resmî belgelerine ulaşın. Bağımsız bir sivil teknoloji projesi.">
+  <title>İzmir'de Ne Karar Verildi?</title>
+  <meta name="description" content="Karşıyaka ve İzmir Büyükşehir Belediye Meclisi kararlarını arayın ve resmî belgelerine ulaşın. Bağımsız bir sivil teknoloji projesi.">
   <!-- OG Meta — sosyal medya paylaşım kartı -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Karşıyaka Ne Karar Verdi?">
+  <meta property="og:title" content="İzmir'de Ne Karar Verildi?">
   <meta property="og:description" content="Belediye meclisi kararlarına resmî kaynaklarıyla ulaşın. Her kayıt doğrudan resmî belgesine bağlıdır.">
   <meta property="og:url" content="https://karsiyaka-meclis-acik.netlify.app">
   <meta property="og:image" content="https://karsiyaka-meclis-acik.netlify.app/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="669">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Karşıyaka Ne Karar Verdi?">
+  <meta name="twitter:title" content="İzmir'de Ne Karar Verildi?">
   <meta name="twitter:description" content="Belediye meclisi kararlarına resmî kaynaklarıyla ulaşın.">
   <meta name="twitter:image" content="https://karsiyaka-meclis-acik.netlify.app/og-image.jpg">
   <meta name="theme-color" content="#0b6047">
@@ -196,7 +196,7 @@
       position: sticky; top: 0; z-index: 2; padding: 14px 0;
       background: rgba(245, 247, 244, .92);
       backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-      display: grid; grid-template-columns: 1fr auto auto; gap: 10px;
+      display: grid; grid-template-columns: minmax(180px, 1fr) auto auto auto; gap: 10px;
       align-items: center;
     }
     .search { position: relative; }
@@ -446,7 +446,7 @@
     <header>
       <div class="brand">
         <span class="mark">K</span>
-        <span>Karşıyaka Ne Karar Verdi?</span>
+        <span>İzmir'de Ne Karar Verildi?</span>
       </div>
       <a class="about" href="#metodoloji">Kaynak ve yöntem</a>
     </header>
@@ -454,7 +454,7 @@
     <p class="independence">Bağımsız bir sivil teknoloji projesi. Belediyenin resmî sitesi değildir.</p>
     <section class="intro">
       <h1>Mecliste ne oldu,<br><span>iki dakikada</span> öğren.</h1>
-      <p>Karşıyaka Belediye Meclisi kararlarına resmî kaynaklarıyla ulaşın. Her kayıt doğrudan resmî belgesine bağlıdır.</p>
+      <p>Karşıyaka ve İzmir Büyükşehir belediye meclislerinin kararlarına resmî kaynaklarıyla ulaşın.</p>
     </section>
 
     <!-- ── Dashboard ──────────────────────────────────────────── -->
@@ -506,6 +506,11 @@
         <button class="filter" data-filter="Yönetim">Yönetim</button>
       </div>
       <select class="year-select" id="yearSelect" aria-label="Yıl filtresi"></select>
+      <select class="year-select" id="municipalitySelect" aria-label="Belediye filtresi">
+        <option value="Tümü">Tüm belediyeler</option>
+        <option value="karsiyaka">Karşıyaka</option>
+        <option value="izmir">İzmir Büyükşehir</option>
+      </select>
     </section>
 
     <div class="meta">
@@ -519,7 +524,7 @@
     <nav class="pagination" id="pagination" aria-label="Sayfalama"></nav>
 
     <section class="notice" id="metodoloji">
-      <strong>Nasıl çalışıyor?</strong> Belediyenin yayımladığı meclis karar özetleri otomatik aktarılır. Başlıklar konuyu daha kolay anlamak için sadeleştirilmiştir. Metin, başlık ve kategoriler hata içerebilir. Arşiv eksiksiz olmayabilir. Bu metinler resmî kararın yerine geçmez; doğrulama ve ayrıntılar için kaynak belgeyi görüntüleyin.
+      <strong>Nasıl çalışıyor?</strong> Karşıyaka karar özetleri ve İzmir Büyükşehir'in tekil meclis kararları resmî kaynaklardan otomatik aktarılır. Büyükşehir için en yeni 50 karar kontrol edilir; eski kararların tamamı bu arşivde bulunmayabilir. Başlıklar konuyu daha kolay anlamak için sadeleştirilmiştir. Metin, başlık ve kategoriler hata içerebilir. Bu metinler resmî kararın yerine geçmez; doğrulama ve ayrıntılar için kaynak belgeyi görüntüleyin.
     </section>
 
     <section class="notice" id="gizlilik">
@@ -573,9 +578,12 @@
     const count      = $('#count');
     const dialog     = $('#detail');
     const yearSelect = $('#yearSelect');
+    const municipalitySelect = $('#municipalitySelect');
 
     let activeTag  = 'Tümü';
     let activeYear = 'Tümü';
+    let activeMunicipality = 'Tümü';
+    const municipalityName = d => d.municipality || (d.municipalityId === 'izmir' ? 'İzmir Büyükşehir' : 'Karşıyaka');
 
     const MONTH_NAMES = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
 
@@ -595,8 +603,9 @@
         .filter(d => {
           if (activeTag !== 'Tümü' && d.tag !== activeTag) return false;
           if (activeYear !== 'Tümü' && !d.date.startsWith(activeYear)) return false;
+          if (activeMunicipality !== 'Tümü' && (d.municipalityId || 'karsiyaka') !== activeMunicipality) return false;
           if (q) {
-            const hay = `${d.title} ${d.text} ${d.place} ${d.tag} ${d.department || d.type || ''} ${d.decisionNo || ''}`
+            const hay = `${d.title} ${d.text} ${d.place} ${d.tag} ${municipalityName(d)} ${d.department || d.type || ''} ${d.decisionNo || ''}`
               .toLocaleLowerCase('tr');
             if (!hay.includes(q)) return false;
           }
@@ -680,7 +689,7 @@
       list.innerHTML = page.length
         ? page.map(d => `
             <article class="decision" tabindex="0" role="button" aria-label="${escHtml(d.title)}" data-id="${d.id}">
-              <div class="date">${formatDate(d.date)}<small>Karar no: ${d.decisionNo || '—'}</small></div>
+              <div class="date">${formatDate(d.date)}<small>${escHtml(municipalityName(d))}</small><small>Karar no: ${d.decisionNo || '—'}</small></div>
               <div>
                 <span class="tag ${tagClass(d.tag)}">${d.tag}</span>
                 <h2>${escHtml(d.title)}</h2>
@@ -741,7 +750,7 @@
 
       $('#dTag').textContent = d.tag;
       $('#dTag').className = `tag ${tagClass(d.tag)}`;
-      $('#dDate').textContent = `  ·  ${formatDate(d.date)}  ·  Karar no: ${d.decisionNo || '—'}`;
+      $('#dDate').textContent = `  ·  ${municipalityName(d)}  ·  ${formatDate(d.date)}  ·  Karar no: ${d.decisionNo || '—'}`;
       $('#dTitle').textContent = d.title;
       $('#dText').textContent = d.text;
       $('#dReview').textContent = 'Resmî belgeden otomatik aktarılmıştır; aktarım hatası içerebilir. Kaynak belgeyi görüntüleyin.';
@@ -824,6 +833,11 @@
       currentPage = 1;
       render();
     });
+    municipalitySelect.addEventListener('change', () => {
+      activeMunicipality = municipalitySelect.value;
+      currentPage = 1;
+      render();
+    });
 
     $('.close').onclick = closeDetail;
     dialog.onclick = e => { if (e.target === dialog) closeDetail(); };
@@ -845,15 +859,15 @@
     }
 
     /* ── Veri Yükleme ───────────────────────────────────────────── */
-    fetch('./data/decisions.json')
-      .then(r => { if (!r.ok) throw new Error('Veri yüklenemedi'); return r.json(); })
-      .then(data => {
-        decisions = data;
+    Promise.all(['./data/decisions.json', './data/izmir-decisions.json'].map(url =>
+      fetch(url).then(r => { if (!r.ok) throw new Error('Veri yüklenemedi'); return r.json(); })))
+      .then(([karsiyaka, izmir]) => {
+        decisions = [...karsiyaka, ...izmir];
         populateYears();
-        updateFooterDate(data);
+        updateFooterDate(decisions);
         fetch('./data/status.json').then(r => r.ok ? r.json() : null).then(status => {
           if (!status?.checkedAt || !Number.isFinite(Date.parse(status.checkedAt))) return;
-          $('#lastUpdated').textContent += ' · Kaynak kontrolü: ' + new Intl.DateTimeFormat('tr-TR', { dateStyle: 'medium' }).format(new Date(status.checkedAt));
+          $('#lastUpdated').textContent += ' · Karşıyaka kaynak kontrolü: ' + new Intl.DateTimeFormat('tr-TR', { dateStyle: 'medium' }).format(new Date(status.checkedAt));
         }).catch(() => {});
         render();
         const id = location.hash.slice(1);
